@@ -1,0 +1,14 @@
+# Archivos generados
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Archivos temporales
+*.tmp
+*.log
