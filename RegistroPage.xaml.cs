@@ -11,6 +11,9 @@ public partial class RegistroPage : ContentPage
     public RegistroPage()
     {
         InitializeComponent();
+        var app = Application.Current;
+        TemaSwitch.IsToggled = app?.UserAppTheme == AppTheme.Dark ||
+            (app?.UserAppTheme == AppTheme.Unspecified && app?.RequestedTheme == AppTheme.Dark);
         CarreraPicker.ItemsSource = new List<string> { "Administración de Empresas", "Derecho", "Ingeniería en Sistemas", "Medicina", "Psicología" };
         CarreraPicker.SelectedIndex = -1;
         NacimientoPicker.MaximumDate = DateTime.Today;
@@ -25,6 +28,12 @@ public partial class RegistroPage : ContentPage
         GeneroMasculino.CheckedChanged += (_, _) => ValidarCampo("genero");
         GeneroOtro.CheckedChanged += (_, _) => ValidarCampo("genero");
         TerminosCheckBox.CheckedChanged += (_, _) => ValidarCampo("terminos");
+    }
+
+    private void OnTemaToggled(object? sender, ToggledEventArgs e)
+    {
+        if (Application.Current is not null)
+            Application.Current.UserAppTheme = e.Value ? AppTheme.Dark : AppTheme.Light;
     }
 
     private async void OnGuardarClicked(object? sender, EventArgs e)

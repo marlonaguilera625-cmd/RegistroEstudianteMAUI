@@ -1,156 +1,113 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RegistroEstudianteMAUI.RegistroPage"
              Title="Registro de estudiante"
-             BackgroundColor="#F3F6FA">
-    <ContentPage.Resources>
-        <Style TargetType="Entry">
-            <Setter Property="TextColor" Value="#172B3A" />
-            <Setter Property="PlaceholderColor" Value="#66788A" />
-            <Setter Property="BackgroundColor" Value="#FFFFFF" />
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="MinimumHeightRequest" Value="46" />
-        </Style>
-        <Style TargetType="Picker">
-            <Setter Property="TextColor" Value="#172B3A" />
-            <Setter Property="TitleColor" Value="#66788A" />
-            <Setter Property="BackgroundColor" Value="#FFFFFF" />
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="MinimumHeightRequest" Value="46" />
-        </Style>
-        <Style TargetType="DatePicker">
-            <Setter Property="TextColor" Value="#172B3A" />
-            <Setter Property="BackgroundColor" Value="#FFFFFF" />
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="MinimumHeightRequest" Value="46" />
-        </Style>
-        <Style TargetType="RadioButton">
-            <Setter Property="TextColor" Value="#20364A" />
-            <Setter Property="BackgroundColor" Value="Transparent" />
-            <Setter Property="BorderColor" Value="#718096" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="MinimumHeightRequest" Value="44" />
-        </Style>
-        <Style TargetType="CheckBox">
-            <Setter Property="Color" Value="#176B87" />
-            <Setter Property="MinimumHeightRequest" Value="44" />
-            <Setter Property="MinimumWidthRequest" Value="44" />
-        </Style>
-        <Style x:Key="FieldLabel" TargetType="Label">
-            <Setter Property="TextColor" Value="#20364A" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="FontAttributes" Value="Bold" />
-        </Style>
-        <Style x:Key="ErrorLabel" TargetType="Label">
-            <Setter Property="TextColor" Value="#B42318" />
-            <Setter Property="FontSize" Value="13" />
-            <Setter Property="LineBreakMode" Value="WordWrap" />
-        </Style>
-        <Style x:Key="FieldFrame" TargetType="Border">
-            <Setter Property="Stroke" Value="#C7D2DE" />
-            <Setter Property="StrokeThickness" Value="1" />
-            <Setter Property="StrokeShape" Value="RoundRectangle 8" />
-            <Setter Property="BackgroundColor" Value="#FFFFFF" />
-            <Setter Property="Padding" Value="10,0" />
-        </Style>
-    </ContentPage.Resources>
-
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
     <Grid RowDefinitions="Auto,*" RowSpacing="0">
-        <Border Grid.Row="0" Padding="24,20" BackgroundColor="#12304A" StrokeThickness="0">
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Registro de estudiante" FontSize="26" FontAttributes="Bold" TextColor="#FFFFFF" />
-                <Label Text="Completa tus datos para validar tu registro académico." FontSize="14" TextColor="#D6E3EF" />
-            </VerticalStackLayout>
+        <Border Grid.Row="0" Padding="22,16"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark=#0B121A}"
+                StrokeThickness="0">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <VerticalStackLayout Spacing="4" VerticalOptions="Center">
+                    <Label Text="Registro de estudiante" FontSize="24" FontAttributes="Bold" TextColor="#FFFFFF" />
+                    <Label Text="Completa tus datos para validar tu registro acad&#xE9;mico." FontSize="14" TextColor="#D6E3EF" />
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Label Text="Modo oscuro" TextColor="#FFFFFF" VerticalTextAlignment="Center" FontSize="13" />
+                    <Switch x:Name="TemaSwitch" Toggled="OnTemaToggled" />
+                </HorizontalStackLayout>
+            </Grid>
         </Border>
         <ScrollView Grid.Row="1">
             <Grid x:Name="FormularioGrid" Padding="20,18,20,24"
-                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-                  ColumnDefinitions="*,*" ColumnSpacing="16" RowSpacing="12"
-                  MaximumWidthRequest="900" HorizontalOptions="Center">
-                <VerticalStackLayout x:Name="NombreSection" Grid.Row="0" Grid.ColumnSpan="2" Spacing="4">
-                    <Label Text="Datos personales" FontSize="17" FontAttributes="Bold" TextColor="#12304A" Margin="0,0,0,2" />
-                    <Label Text="Nombre completo" Style="{StaticResource FieldLabel}" />
-                    <Border Style="{StaticResource FieldFrame}"><Entry x:Name="NombreEntry" Placeholder="Ej. María Fernanda López" Keyboard="Text" ReturnType="Next" /></Border>
-                    <Label x:Name="NombreError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+                  RowDefinitions="Auto,Auto,Auto"
+                  ColumnDefinitions="{OnIdiom Phone='*', Tablet='*,*', Desktop='*,*'}"
+                  ColumnSpacing="24" RowSpacing="18" MaximumWidthRequest="960"
+                  HorizontalOptions="Center">
+                <VerticalStackLayout x:Name="DatosPersonalesSection" Grid.Row="0" Grid.Column="0"
+                                     Grid.ColumnSpan="{OnIdiom Phone=1, Tablet=1, Desktop=1}"
+                                     Spacing="10" HorizontalOptions="Fill">
+                    <Label Text="Datos personales" FontSize="18" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource TextDark}}" />
+                    <VerticalStackLayout x:Name="NombreSection" Spacing="4">
+                        <Label Text="Nombre completo" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource FieldFrame}"><Entry x:Name="NombreEntry" Placeholder="Ej. Mar&#xED;a Fernanda L&#xF3;pez" Keyboard="Text" ReturnType="Next">
+                            <VisualStateManager.VisualStateGroups><VisualStateGroup x:Name="FocusStates"><VisualState x:Name="Unfocused" /><VisualState x:Name="Focused"><VisualState.Setters><Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource Primary}}" /><Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}" /></VisualState.Setters></VisualState></VisualStateGroup></VisualStateManager.VisualStateGroups>
+                        </Entry></Border>
+                        <Label x:Name="NombreError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="TelefonoSection" Spacing="4">
+                        <Label Text="Tel&#xE9;fono" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource FieldFrame}"><Entry x:Name="TelefonoEntry" Placeholder="Ej. +504 9999-1234" Keyboard="Telephone" ReturnType="Done">
+                            <VisualStateManager.VisualStateGroups><VisualStateGroup x:Name="FocusStates"><VisualState x:Name="Unfocused" /><VisualState x:Name="Focused"><VisualState.Setters><Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource Primary}}" /><Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}" /></VisualState.Setters></VisualState></VisualStateGroup></VisualStateManager.VisualStateGroups>
+                        </Entry></Border>
+                        <Label x:Name="TelefonoError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="FechaSection" Spacing="4">
+                        <Label Text="Fecha de nacimiento" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource FieldFrame}"><DatePicker x:Name="NacimientoPicker" HorizontalOptions="Fill" /></Border>
+                        <Label x:Name="NacimientoError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
-                <VerticalStackLayout x:Name="CorreoSection" Grid.Row="1" Grid.ColumnSpan="2" Spacing="4">
-                    <Label Text="Correo electrónico" Style="{StaticResource FieldLabel}" />
-                    <Border Style="{StaticResource FieldFrame}"><Entry x:Name="CorreoEntry" Placeholder="nombre@universidad.edu" Keyboard="Email" ReturnType="Next" /></Border>
-                    <Label x:Name="CorreoError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+
+                <VerticalStackLayout x:Name="InformacionAcademicaSection"
+                                     Grid.Row="{OnIdiom Phone=1, Tablet=0, Desktop=0}"
+                                     Grid.Column="{OnIdiom Phone=0, Tablet=1, Desktop=1}"
+                                     Grid.ColumnSpan="{OnIdiom Phone=1, Tablet=1, Desktop=1}"
+                                     Spacing="10" HorizontalOptions="Fill">
+                    <Label Text="Informaci&#xF3;n acad&#xE9;mica" FontSize="18" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource TextDark}}" />
+                    <VerticalStackLayout x:Name="CorreoSection" Spacing="4">
+                        <Label Text="Correo electr&#xF3;nico" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource FieldFrame}"><Entry x:Name="CorreoEntry" Placeholder="nombre@universidad.edu" Keyboard="Email" ReturnType="Next">
+                            <VisualStateManager.VisualStateGroups><VisualStateGroup x:Name="FocusStates"><VisualState x:Name="Unfocused" /><VisualState x:Name="Focused"><VisualState.Setters><Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource Primary}}" /><Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}" /></VisualState.Setters></VisualState></VisualStateGroup></VisualStateManager.VisualStateGroups>
+                        </Entry></Border>
+                        <Label x:Name="CorreoError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="CarreraSection" Spacing="4">
+                        <Label Text="Carrera" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource FieldFrame}"><Picker x:Name="CarreraPicker"
+                                HeightRequest="46" MinimumHeightRequest="46"
+                                VerticalOptions="Fill" HorizontalOptions="Fill"
+                                VerticalTextAlignment="Center" HorizontalTextAlignment="Start"
+                                SemanticProperties.Description="Selector de carrera. Pulse para mostrar las carreras disponibles." /></Border>
+                        <Label x:Name="CarreraError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="GeneroSection" Spacing="4">
+                        <Label Text="G&#xE9;nero" Style="{StaticResource FieldLabel}" />
+                        <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
+                            <RadioButton x:Name="GeneroFemenino" GroupName="Genero" Content="Femenino" />
+                            <RadioButton x:Name="GeneroMasculino" GroupName="Genero" Content="Masculino" />
+                            <RadioButton x:Name="GeneroOtro" GroupName="Genero" Content="Otro" />
+                        </FlexLayout>
+                        <Label x:Name="GeneroError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
-                <VerticalStackLayout x:Name="TelefonoSection" Grid.Row="2" Grid.ColumnSpan="2" Spacing="4">
-                    <Label Text="Teléfono" Style="{StaticResource FieldLabel}" />
-                    <Border Style="{StaticResource FieldFrame}"><Entry x:Name="TelefonoEntry" Placeholder="Ej. +504 9999-1234" Keyboard="Telephone" ReturnType="Done" /></Border>
-                    <Label x:Name="TelefonoError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
+
+                <VerticalStackLayout Grid.Row="2" Grid.Column="0"
+                                     Grid.ColumnSpan="{OnIdiom Phone=1, Tablet=2, Desktop=2}"
+                                     Spacing="8" HorizontalOptions="Fill">
+                    <VerticalStackLayout x:Name="TerminosSection" Spacing="2">
+                        <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                            <CheckBox x:Name="TerminosCheckBox" />
+                            <Label Text="Acepto los t&#xE9;rminos y condiciones del registro." VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
+                        <Label x:Name="TerminosError" Style="{StaticResource ErrorLabel}" IsVisible="False" Margin="8,0,0,0" />
+                    </VerticalStackLayout>
+                    <Label x:Name="EstadoValidacionLabel" IsVisible="False"
+                           TextColor="{AppThemeBinding Light={StaticResource ErrorColor}, Dark={StaticResource ErrorDark}}"
+                           FontAttributes="Bold" FontSize="13" LineBreakMode="WordWrap" />
+                    <Grid x:Name="AccionesGrid" ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,4,0,0">
+                        <Button Grid.Column="0" Text="Guardar" Style="{StaticResource BotonPrimario}" Clicked="OnGuardarClicked" />
+                        <Button Grid.Column="1" Text="Limpiar" Style="{StaticResource BotonSecundario}" Clicked="OnLimpiarClicked" />
+                    </Grid>
                 </VerticalStackLayout>
-                <VerticalStackLayout x:Name="CarreraSection" Grid.Row="3" Grid.Column="0" Spacing="4">
-                    <Label Text="Información académica" FontSize="17" FontAttributes="Bold" TextColor="#12304A" Margin="0,0,0,2" />
-                    <Label Text="Carrera" Style="{StaticResource FieldLabel}" />
-                    <Border Style="{StaticResource FieldFrame}">
-                        <Picker x:Name="CarreraPicker" Title="Seleccione una carrera"
-                                HeightRequest="46" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Fill"
-                                SemanticProperties.Description="Selector de carrera. Pulse para mostrar las carreras disponibles." />
-                    </Border>
-                    <Label x:Name="CarreraError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
-                </VerticalStackLayout>
-                <VerticalStackLayout x:Name="FechaSection" Grid.Row="3" Grid.Column="1" Spacing="4">
-                    <Label Text="Fecha de nacimiento" Style="{StaticResource FieldLabel}" Margin="0,25,0,0" />
-                    <Border Style="{StaticResource FieldFrame}"><DatePicker x:Name="NacimientoPicker" HorizontalOptions="Fill" /></Border>
-                    <Label x:Name="NacimientoError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
-                </VerticalStackLayout>
-                <VerticalStackLayout x:Name="GeneroSection" Grid.Row="4" Grid.ColumnSpan="2" Spacing="4">
-                    <Label Text="Género" Style="{StaticResource FieldLabel}" />
-                    <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
-                        <RadioButton x:Name="GeneroFemenino" GroupName="Genero" Content="Femenino" />
-                        <RadioButton x:Name="GeneroMasculino" GroupName="Genero" Content="Masculino" />
-                        <RadioButton x:Name="GeneroOtro" GroupName="Genero" Content="Otro" />
-                    </FlexLayout>
-                    <Label x:Name="GeneroError" Style="{StaticResource ErrorLabel}" IsVisible="False" />
-                </VerticalStackLayout>
-                <VerticalStackLayout x:Name="TerminosSection" Grid.Row="5" Grid.ColumnSpan="2" Spacing="2">
-                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                        <CheckBox x:Name="TerminosCheckBox" />
-                        <Label Text="Acepto los términos y condiciones del registro." VerticalTextAlignment="Center" TextColor="#20364A" />
-                    </HorizontalStackLayout>
-                    <Label x:Name="TerminosError" Style="{StaticResource ErrorLabel}" IsVisible="False" Margin="8,0,0,0" />
-                </VerticalStackLayout>
-                <Label x:Name="EstadoValidacionLabel" Grid.Row="6" Grid.ColumnSpan="2" IsVisible="False" TextColor="#B42318" FontAttributes="Bold" FontSize="13" LineBreakMode="WordWrap" />
-                <Grid x:Name="AccionesGrid" Grid.Row="7" Grid.ColumnSpan="2" ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,4,0,0">
-                    <Button Grid.Column="0" Text="Guardar" BackgroundColor="#176B87" TextColor="#FFFFFF" FontAttributes="Bold" CornerRadius="8" MinimumHeightRequest="48" Clicked="OnGuardarClicked" />
-                    <Button Grid.Column="1" Text="Limpiar" BackgroundColor="#E1E8EF" TextColor="#20364A" FontAttributes="Bold" CornerRadius="8" MinimumHeightRequest="48" Clicked="OnLimpiarClicked" />
-                </Grid>
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="WindowWidthStates">
-                        <VisualState x:Name="Narrow">
-                            <VisualState.StateTriggers><AdaptiveTrigger MinWindowWidth="0" /></VisualState.StateTriggers>
-                            <VisualState.Setters>
-                                <Setter TargetName="CarreraSection" Property="Grid.ColumnSpan" Value="2" />
-                                <Setter TargetName="FechaSection" Property="Grid.Row" Value="4" />
-                                <Setter TargetName="FechaSection" Property="Grid.Column" Value="0" />
-                                <Setter TargetName="FechaSection" Property="Grid.ColumnSpan" Value="2" />
-                                <Setter TargetName="GeneroSection" Property="Grid.Row" Value="5" />
-                                <Setter TargetName="TerminosSection" Property="Grid.Row" Value="6" />
-                                <Setter TargetName="EstadoValidacionLabel" Property="Grid.Row" Value="7" />
-                                <Setter TargetName="AccionesGrid" Property="Grid.Row" Value="8" />
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="Wide">
-                            <VisualState.StateTriggers><AdaptiveTrigger MinWindowWidth="720" /></VisualState.StateTriggers>
-                            <VisualState.Setters>
-                                <Setter TargetName="CarreraSection" Property="Grid.ColumnSpan" Value="1" />
-                                <Setter TargetName="FechaSection" Property="Grid.Row" Value="3" />
-                                <Setter TargetName="FechaSection" Property="Grid.Column" Value="1" />
-                                <Setter TargetName="FechaSection" Property="Grid.ColumnSpan" Value="1" />
-                                <Setter TargetName="GeneroSection" Property="Grid.Row" Value="4" />
-                                <Setter TargetName="TerminosSection" Property="Grid.Row" Value="5" />
-                                <Setter TargetName="EstadoValidacionLabel" Property="Grid.Row" Value="6" />
-                                <Setter TargetName="AccionesGrid" Property="Grid.Row" Value="7" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
             </Grid>
         </ScrollView>
     </Grid>
 </ContentPage>
+
+
+
+
